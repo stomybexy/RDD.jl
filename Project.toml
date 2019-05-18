@@ -1,0 +1,7 @@
+name = "RDD"
+uuid = "e4b00b22-7947-11e9-33c8-1bc16e8482e2"
+authors = ["Jonatan Sombié <jonatan.sombie@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
