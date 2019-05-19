@@ -8,8 +8,11 @@ export AbstractRDD,
     preferredlocations,
     dependencies,
     iterator,
-    partitioner
+    partitioner,
+    ParallelCollectionRDD,
+    ParallelCollectionPartition
 
 include("./AbstractRDD.jl")
+include("./ParallelCollectionRDD.jl")
 
 end # module
