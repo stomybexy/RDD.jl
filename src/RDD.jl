@@ -3,7 +3,6 @@ module RDD
 export AbstractRDD,
     AbstractPartition,
     AbstractDependency,
-    AbstractPartitionIterator,
     AbstractPartitioner,
     partitions,
     preferredlocations,

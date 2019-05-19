@@ -19,7 +19,7 @@ using RDD
         @test_throws ErrorException dependencies(rdd)   
     end
     @testset "iterator function is defined" begin
-        @test_throws ErrorException iterator(rdd, part, AbstractPartitionIterator[])
+        @test_throws ErrorException iterator(rdd, part, AbstractChannel[])
     end
     @testset "partitioner function is defined" begin
         @test_throws ErrorException partitioner(rdd)
