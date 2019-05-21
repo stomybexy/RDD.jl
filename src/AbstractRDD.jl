@@ -1,6 +1,7 @@
 
 abstract type AbstractRDD{T} end
 abstract type AbstractPartition{T} end
+abstract type AbstractPartitionIterator{T} end
 abstract type AbstractLocation end
 abstract type AbstractDependency end
 abstract type AbstractPartitioner end
@@ -11,7 +12,7 @@ end
 
 function preferredlocations(
             rdd::AbstractRDD{T}, 
-            partition::AbstractPartition{T}
+            partition::Int
         )::AbstractVector{AbstractLocation} where {T} 
 
     error("method preferredlocations(::$(typeof(rdd)), ::$(typeof(partition))) has not bean implemented")
@@ -23,10 +24,9 @@ function dependencies(rdd::AbstractRDD)::AbstractVector{AbstractDependency}
 end
 
 function iterator(
-        rdd::AbstractRDD{T}, 
-        partition::AbstractPartition{T}, 
-        parent_iters::AbstractVector{AbstractChannel}
-    )::AbstractChannel{T} where {T} 
+        rdd::AbstractRDD{T},
+        partition::Int, 
+        parent_iters::AbstractVector{AbstractPartitionIterator}) :: AbstractPartitionIterator{T} where {T}
 
     error("method iterator(::$(typeof(rdd)),::$(typeof(partition)),::$(typeof(parent_iters))) has not bean implemented")
 

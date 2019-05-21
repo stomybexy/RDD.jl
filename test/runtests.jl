@@ -1,6 +1,6 @@
 using Test
 
-using RDD
+using RDD, Distributed
 
 @testset "RDD tests" begin
     include("./AbstractRDD.test.jl")
