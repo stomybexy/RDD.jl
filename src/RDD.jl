@@ -1,6 +1,9 @@
 module RDD
 
-using Distributed, Random
+include("./AbstractRDD.jl")
+include("./ParallelCollectionRDD.jl")
+
+using .AbstractRDDModule, .ParallelCollectionRDDModule
 
 export AbstractRDD,
     AbstractPartition,
@@ -15,8 +18,5 @@ export AbstractRDD,
     ParallelCollectionRDD,
     ParallelCollectionPartition,
     ParallelCollectionPartitionIterator
-
-include("./AbstractRDD.jl")
-include("./ParallelCollectionRDD.jl")
 
 end # module

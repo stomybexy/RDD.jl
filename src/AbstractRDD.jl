@@ -1,4 +1,17 @@
 
+module AbstractRDDModule
+
+export AbstractRDD,
+    AbstractPartition,
+    AbstractDependency,
+    AbstractPartitioner,
+    AbstractPartitionIterator,
+    partitions,
+    preferredlocations,
+    dependencies,
+    iterator,
+    partitioner
+
 abstract type AbstractRDD{T} end
 abstract type AbstractPartition{T} end
 abstract type AbstractPartitionIterator{T} end
@@ -34,4 +47,6 @@ end
 
 function partitioner(rdd::AbstractRDD)::AbstractPartitioner 
     error("method partitioner(::$(typeof(rdd))) has not bean implemented")
+end
+
 end
