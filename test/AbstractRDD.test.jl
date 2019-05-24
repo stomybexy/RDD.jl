@@ -1,3 +1,4 @@
+using Test
 
 @testset "define AbstractRDD interface" begin
 

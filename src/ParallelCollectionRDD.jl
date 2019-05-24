@@ -1,3 +1,12 @@
+module ParallelCollectionRDDModule
+
+using Distributed, Random
+using ..AbstractRDDModule
+import ..AbstractRDDModule: partitions, iterator
+
+export ParallelCollectionRDD,
+        ParallelCollectionPartition,
+        ParallelCollectionPartitionIterator
 
 struct ParallelCollectionPartition{T} <: AbstractPartition{T}
     idxrange::NTuple{2, Int}
@@ -43,4 +52,6 @@ function iterator(
         idxstart, idxend = rdd.parts[numpart].idxrange
 
         ParallelCollectionPartitionIterator{T}(@fetchfrom 1 eval(rdd.colsymbol)[idxstart:1:idxend])
+end
+
 end

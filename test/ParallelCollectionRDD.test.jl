@@ -1,3 +1,5 @@
+using Test
+
 function rmworkers() 
     for worker in workers()
         rmprocs(worker)
