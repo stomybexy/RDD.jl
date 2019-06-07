@@ -1,6 +1,8 @@
 
 module AbstractRDDModule
 
+using Documenter, DocStringExtensions
+
 export AbstractRDD,
     AbstractPartition,
     AbstractDependency,
@@ -19,10 +21,16 @@ abstract type AbstractLocation end
 abstract type AbstractDependency end
 abstract type AbstractPartitioner end
 
+""" $(SIGNATURES)
+Returns the list of partitions of the given rdd.
+"""
 function partitions(rdd::AbstractRDD{T})::AbstractVector{AbstractPartition{T}} where {T} 
     error("method partitions(::$(typeof(rdd))) has not bean implemented")
 end
 
+""" $(SIGNATURES)
+Returns the list of preffered locations ordered by preference for a partition of an rdd.
+"""
 function preferredlocations(
             rdd::AbstractRDD{T}, 
             partition::Int
