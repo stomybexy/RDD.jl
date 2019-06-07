@@ -1,7 +1,7 @@
 
 module AbstractRDDModule
 
-using Documenter, DocStringExtensions
+using DocStringExtensions
 
 export AbstractRDD,
     AbstractPartition,
