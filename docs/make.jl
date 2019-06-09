@@ -1,6 +1,3 @@
-# using Pkg
-# Pkg.activate("$(@__DIR__)/..")
-# push!(LOAD_PATH, "$(@__DIR__)/../src/")
 using Documenter, RDD
 
 # Workaround for JuliaLang/julia/pull/28625
