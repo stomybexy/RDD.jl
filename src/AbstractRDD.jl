@@ -14,14 +14,33 @@ export AbstractRDD,
     iterator,
     partitioner
 
+""" $(SIGNATURES)
+"""
 abstract type AbstractRDD{T} end
-abstract type AbstractPartition{T} end
-abstract type AbstractPartitionIterator{T} end
-abstract type AbstractLocation end
-abstract type AbstractDependency end
-abstract type AbstractPartitioner end
 
 """ $(SIGNATURES)
+"""
+abstract type AbstractPartition{T} end
+
+""" $(SIGNATURES)
+"""
+abstract type AbstractPartitionIterator{T} end
+
+""" $(SIGNATURES)
+"""
+abstract type AbstractLocation end
+
+""" $(SIGNATURES)
+"""
+abstract type AbstractDependency end
+
+""" $(SIGNATURES)
+"""
+abstract type AbstractPartitioner end
+
+""" 
+    partitions(rdd::AbstractRDD{T})::AbstractVector{AbstractPartition{T}} where {T} 
+
 Returns the list of partitions of the given rdd.
 """
 function partitions(rdd::AbstractRDD{T})::AbstractVector{AbstractPartition{T}} where {T} 
@@ -40,10 +59,14 @@ function preferredlocations(
 
 end
 
+""" $(SIGNATURES)
+"""
 function dependencies(rdd::AbstractRDD)::AbstractVector{AbstractDependency} 
     error("method dependencies(::$(typeof(rdd))) has not bean implemented")
 end
 
+""" $(SIGNATURES)
+"""
 function iterator(
         rdd::AbstractRDD{T},
         partition::Int, 
@@ -53,6 +76,8 @@ function iterator(
 
 end
 
+""" $(SIGNATURES)
+"""
 function partitioner(rdd::AbstractRDD)::AbstractPartitioner 
     error("method partitioner(::$(typeof(rdd))) has not bean implemented")
 end
