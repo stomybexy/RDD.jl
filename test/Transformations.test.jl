@@ -10,6 +10,10 @@ using Test
             @test isa(map(x -> x * x, parentrdd), MapPartitionsRDD{Any})
         end
 
+        @testset "create a MapPartitionRDD{Int}" begin
+            @test isa(map(x -> x * x, parentrdd, Int), MapPartitionsRDD{Int})
+        end
+
     end
 
 end
