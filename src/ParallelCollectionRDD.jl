@@ -7,7 +7,6 @@ using ..AbstractRDDModule
 import ..AbstractRDDModule: partitions, iterator
 
 export ParallelCollectionRDD,
-        ParallelCollectionPartition,
         ParallelCollectionPartitionIterator
 
 """
@@ -15,7 +14,7 @@ export ParallelCollectionRDD,
 
 Type of a partition of [`ParallelCollectionRDD`](@ref)
 """
-struct ParallelCollectionPartition{T} <: AbstractPartition{T}
+struct ParallelCollectionPartition{T}
     idxrange::NTuple{2, Int}
 end
 
@@ -74,26 +73,25 @@ end
 """
     partitions(
             rdd:: ParallelCollectionRDD{T}
-        )::AbstractVector{ParallelCollectionPartition{T}} where {T}
+        )::Int64 where {T}
 
 Implementation of [`partitions`](@ref) for [`ParallelCollectionRDD`](@ref).
 """
-function partitions(rdd:: ParallelCollectionRDD{T})::AbstractVector{ParallelCollectionPartition{T}} where {T} 
-    rdd.parts
+function partitions(rdd:: ParallelCollectionRDD{T})::Int64 where {T} 
+    rdd.parts |> length
 end
 
 """ 
     iterator(
         rdd::ParallelCollectionRDD{T}, 
-        numpart::Int,
-        parent_iters::AbstractVector{AbstractPartitionIterator}
+        numpart::Int
     )::ParallelCollectionPartitionIterator{T} where {T}
 
 Implementation of [`iterator`](@ref) for [`ParallelCollectionRDD`](@ref).
 """
 function iterator(
-        rdd::ParallelCollectionRDD{T}, numpart::Int,
-        parent_iters::AbstractVector{AbstractPartitionIterator})::ParallelCollectionPartitionIterator{T} where {T}
+        rdd::ParallelCollectionRDD{T}, numpart::Int
+    )::ParallelCollectionPartitionIterator{T} where {T}
 
         idxstart, idxend = rdd.parts[numpart].idxrange
 

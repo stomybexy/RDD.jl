@@ -2,11 +2,15 @@ module RDD
 
 include("./AbstractRDD.jl")
 include("./ParallelCollectionRDD.jl")
+include("./MapPartitionsRDD.jl")
+include("./Transformations.jl")
 
-using .AbstractRDDModule, .ParallelCollectionRDDModule
+using .AbstractRDDModule, 
+      .ParallelCollectionRDDModule,
+      .MapPartitionsRDDModule,
+      .Transformations
 
 export AbstractRDD,
-    AbstractPartition,
     AbstractDependency,
     AbstractPartitioner,
     AbstractPartitionIterator,
@@ -16,7 +20,7 @@ export AbstractRDD,
     iterator,
     partitioner,
     ParallelCollectionRDD,
-    ParallelCollectionPartition,
-    ParallelCollectionPartitionIterator
+    ParallelCollectionPartitionIterator,
+    MapPartitionsRDD
 
 end # module

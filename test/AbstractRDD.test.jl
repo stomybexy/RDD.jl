@@ -15,7 +15,7 @@ using Test
         @test isempty(dependencies(rdd))
     end
     @testset "iterator function is defined" begin
-        @test_throws ErrorException iterator(rdd, 1, AbstractPartitionIterator[])
+        @test_throws ErrorException iterator(rdd, 1)
     end
     @testset "partitioner function is defined" begin
         @test isnothing(partitioner(rdd))
