@@ -4,7 +4,6 @@ module AbstractRDDModule
 using DocStringExtensions
 
 export AbstractRDD,
-    AbstractPartition,
     AbstractDependency,
     AbstractPartitioner,
     AbstractPartitionIterator,
@@ -18,11 +17,6 @@ export AbstractRDD,
 Parent type of rdds.
 """
 abstract type AbstractRDD{T} end
-
-"""
-Parent type of rdd partitions.
-"""
-abstract type AbstractPartition{T} end
 
 """
 Parent type of rdd partitions iterators.
@@ -45,13 +39,13 @@ Parent type of rdd partitioner.
 abstract type AbstractPartitioner end
 
 """ 
-    partitions(rdd::AbstractRDD{T})::AbstractVector{AbstractPartition{T}} where {T} 
+    partitions(rdd::AbstractRDD{T})::Int64 where {T} 
 
-Returns the list of partitions of the given rdd.
+Returns the number of partitions of the given rdd.
 This method must be implemented by subclasses of [`AbstractRDD`](@ref).
 The default implementation raises an error.
 """
-function partitions(rdd::AbstractRDD{T})::AbstractVector{AbstractPartition{T}} where {T} 
+function partitions(rdd::AbstractRDD{T})::Int64 where {T} 
     error("method partitions(::$(typeof(rdd))) has not bean implemented")
 end
 
@@ -82,8 +76,7 @@ end
 """ 
     iterator(
         rdd::AbstractRDD{T}, 
-        partition::Int, 
-        parent_iters::AbstractVector{AbstractPartitionIterator}
+        partition::Int
     )::AbstractPartitionIterator{T} where {T}
 
 Returns an iterator on a partition of the rdd given parent partition(s) iterators.
@@ -91,10 +84,9 @@ This method must be implemented by subclasses of [`AbstractRDD`](@ref).
 """
 function iterator(
         rdd::AbstractRDD{T},
-        partition::Int, 
-        parent_iters::AbstractVector{AbstractPartitionIterator})::AbstractPartitionIterator{T} where {T}
+        partition::Int)::AbstractPartitionIterator{T} where {T}
 
-    error("method iterator(::$(typeof(rdd)),::$(typeof(partition)),::$(typeof(parent_iters))) has not bean implemented")
+    error("method iterator(::$(typeof(rdd)),::$(typeof(partition))) has not bean implemented")
 
 end
 
