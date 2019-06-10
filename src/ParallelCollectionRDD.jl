@@ -10,20 +10,29 @@ export ParallelCollectionRDD,
         ParallelCollectionPartition,
         ParallelCollectionPartitionIterator
 
-""" $(SIGNATURES)
+"""
+    struct ParallelCollectionPartition{T} <: AbstractPartition{T}
+
+Type of a partition of [`ParallelCollectionRDD`](@ref)
 """
 struct ParallelCollectionPartition{T} <: AbstractPartition{T}
     idxrange::NTuple{2, Int}
 end
 
-""" $(SIGNATURES)
+"""
+    struct ParallelCollectionRDD{T} <: AbstractRDD{T}
+
+A subclass of AbstractRDD representing distributed in-memory collection.
 """
 struct ParallelCollectionRDD{T} <: AbstractRDD{T}
     parts::AbstractVector{ParallelCollectionPartition{T}}
     colsymbol::Symbol
 end
 
-""" $(SIGNATURES)
+"""
+    struct ParallelCollectionPartitionIterator{T} <: AbstractPartitionIterator{T}
+
+Type of the iterator of a [`ParallelCollectionPartition`](@ref)
 """
 struct ParallelCollectionPartitionIterator{T} <: AbstractPartitionIterator{T}
     values::Vector{T}
@@ -35,13 +44,21 @@ end
 
 Base.length(partiter::ParallelCollectionPartitionIterator{T})  where {T} = Base.length(partiter.values)
 
-""" $(SIGNATURES)
+"""
+    ParallelCollectionRDD{T}(col::AbstractVector{T}) where {T}
+
+Create a [`ParallelCollectionRDD`](@ref) from a vector.
+The number of partitions will be the number of workers of a julia cluster as returned by workers().
+If there is less than 2 workers, 2 partitions will be created.
 """
 function ParallelCollectionRDD{T}(col::AbstractVector{T}) where {T}
     ParallelCollectionRDD{T}(col, max(workers() |> length, 2))
 end
 
-""" $(SIGNATURES)
+"""
+    ParallelCollectionRDD{T}(col::AbstractVector{T}, numpart::Int) where {T}
+
+Create a [`ParallelCollectionRDD`](@ref) from a vector with `numpart` partitions.
 """
 function ParallelCollectionRDD{T}(col::AbstractVector{T}, numpart::Int) where {T}
     colsymbol = Symbol(randstring(10))
@@ -54,13 +71,25 @@ function ParallelCollectionRDD{T}(col::AbstractVector{T}, numpart::Int) where {T
     ParallelCollectionRDD{T}(parts, colsymbol)
 end
 
-""" $(SIGNATURES)
+"""
+    partitions(
+            rdd:: ParallelCollectionRDD{T}
+        )::AbstractVector{ParallelCollectionPartition{T}} where {T}
+
+Implementation of [`partitions`](@ref) for [`ParallelCollectionRDD`](@ref).
 """
 function partitions(rdd:: ParallelCollectionRDD{T})::AbstractVector{ParallelCollectionPartition{T}} where {T} 
     rdd.parts
 end
 
-""" $(SIGNATURES)
+""" 
+    iterator(
+        rdd::ParallelCollectionRDD{T}, 
+        numpart::Int,
+        parent_iters::AbstractVector{AbstractPartitionIterator}
+    )::ParallelCollectionPartitionIterator{T} where {T}
+
+Implementation of [`iterator`](@ref) for [`ParallelCollectionRDD`](@ref).
 """
 function iterator(
         rdd::ParallelCollectionRDD{T}, numpart::Int,

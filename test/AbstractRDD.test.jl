@@ -8,16 +8,16 @@ using Test
     @testset "partitions interface must be defined" begin
         @test_throws ErrorException partitions(rdd)
     end
-    @testset "preferredlocations function is defined" begin
-        @test_throws ErrorException preferredlocations(rdd, 1)
+    @testset "No prefeered locations by default" begin
+        @test isempty(preferredlocations(rdd, 1))
     end
-    @testset "dependencies function is defined" begin
-        @test_throws ErrorException dependencies(rdd)   
+    @testset "No dependencies by default" begin
+        @test isempty(dependencies(rdd))
     end
     @testset "iterator function is defined" begin
         @test_throws ErrorException iterator(rdd, 1, AbstractPartitionIterator[])
     end
     @testset "partitioner function is defined" begin
-        @test_throws ErrorException partitioner(rdd)
+        @test isnothing(partitioner(rdd))
     end
 end
