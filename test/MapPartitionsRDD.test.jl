@@ -14,7 +14,9 @@ using Test
         parentrdd = ParallelCollectionRDD{Int}(v, 2)
         rdd = MapPartitionsRDD{Int}(x->x * x, parentrdd)
 
-        @test collect(iterator(rdd, 1)) == [1, 4, 9, 16, 25]
+        parentiter = iterator(parentrdd, 1)
+
+        @test collect(iterator(rdd, 1, AbstractPartitionIterator[parentiter])) == [1, 4, 9, 16, 25]
     end 
 
 end

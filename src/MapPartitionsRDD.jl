@@ -26,10 +26,10 @@ struct MapPartitionIterator{T} <: AbstractPartitionIterator{T}
 end
 
 
-Base.iterate(partiter::MapPartitionIterator{T}, state=1) where {T} = begin
-    iterresult = Base.iterate(partiter.parentiter, state)
+Base.iterate(iter::MapPartitionIterator{T}, state=nothing) where {T} = begin
+    iterresult = Base.iterate(iter.parentiter, state)
     if !isnothing(iterresult)
-        return partiter.f(iterresult[1]), iterresult[2]
+        return iter.f(iterresult[1]), iterresult[2]
     end
     return nothing
     
@@ -49,7 +49,7 @@ partitions(rdd::MapPartitionsRDD)::Int64 = partitions(rdd.parentrdd)
     iterator(
         rdd::MapPartitionsRDD, 
         part::Int, 
-        parent_iters::AbstractVector{AbstractPartitionIterator}
+        parentiters::AbstractVector{AbstractPartitionIterator}
     )::AbstractPartitionIterator{T} where {T}
 
 Implementation of [`iterator`](@ref) for [`MapPartitionsRDD`](@ref).
@@ -57,10 +57,11 @@ Returns the elements of parent partition transformed by map function.
 """
 function iterator(
     rdd::MapPartitionsRDD{T}, 
-    part::Int
+    part::Int,
+    parentiters::AbstractVector{AbstractPartitionIterator}
 )::AbstractPartitionIterator{T} where {T}
 
-    MapPartitionIterator{T}(rdd.f, iterator(rdd.parentrdd, part))
+    MapPartitionIterator{T}(rdd.f, parentiters[1])
 
 end
 
