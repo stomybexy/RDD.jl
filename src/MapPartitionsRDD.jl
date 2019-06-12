@@ -11,31 +11,9 @@ export MapPartitionsRDD
 Type of an rdd whose partitions are derived from a parent rdd partitions by application of a map function.
 """
 struct MapPartitionsRDD{T} <: AbstractRDD{T} 
-    f # Map function
+    f # Map function applied to partition iterator
     parentrdd::AbstractRDD
 end
-
-"""
-    struct MapPartitionIterator{T} <: AbstractPartitionIterator{T}
-
-Iterator that returns parent partition element transformed by a map function.
-"""
-struct MapPartitionIterator{T} <: AbstractPartitionIterator{T}
-    f # Map function
-    parentiter::AbstractPartitionIterator
-end
-
-
-Base.iterate(iter::MapPartitionIterator{T}, state=nothing) where {T} = begin
-    iterresult = Base.iterate(iter.parentiter, state)
-    if !isnothing(iterresult)
-        return iter.f(iterresult[1]), iterresult[2]
-    end
-    return nothing
-    
-end
-
-Base.length(partiter::MapPartitionIterator{T})  where {T} = Base.length(partiter.parentiter)
 
 """
     partitions(rdd::MapPartitionsRDD)::Int64
@@ -61,7 +39,7 @@ function iterator(
     parentiters::AbstractVector{AbstractPartitionIterator}
 )::AbstractPartitionIterator{T} where {T}
 
-    MapPartitionIterator{T}(rdd.f, parentiters[1])
+    rdd.f(parentiters[1])
 
 end
 
