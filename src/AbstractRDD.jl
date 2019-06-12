@@ -76,7 +76,8 @@ end
 """ 
     iterator(
         rdd::AbstractRDD{T}, 
-        partition::Int
+        partition::Int,
+        parentiters::AbstractVector
     )::AbstractPartitionIterator{T} where {T}
 
 Returns an iterator on a partition of the rdd given parent partition(s) iterators.
@@ -84,7 +85,7 @@ This method must be implemented by subclasses of [`AbstractRDD`](@ref).
 """
 function iterator(
         rdd::AbstractRDD{T},
-        partition::Int)::AbstractPartitionIterator{T} where {T}
+        partition::Int, parentiters::AbstractVector{AbstractPartitionIterator})::AbstractPartitionIterator{T} where {T}
 
     error("method iterator(::$(typeof(rdd)),::$(typeof(partition))) has not bean implemented")
 

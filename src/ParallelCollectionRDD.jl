@@ -34,14 +34,19 @@ end
 Type of the iterator of a [`ParallelCollectionPartition`](@ref)
 """
 struct ParallelCollectionPartitionIterator{T} <: AbstractPartitionIterator{T}
-    values::Vector{T}
+    values::RemoteChannel
+    count
 end
 
-Base.iterate(partiter::ParallelCollectionPartitionIterator{T}, state=1) where {T} = begin
-    Base.iterate(partiter.values, state)
+Base.iterate(iter::ParallelCollectionPartitionIterator{T}, state=nothing) where {T} = begin
+    val = take!(iter.values)
+    if !isnothing(val) 
+        return val, nothing
+    end
+    return nothing
 end
 
-Base.length(partiter::ParallelCollectionPartitionIterator{T})  where {T} = Base.length(partiter.values)
+Base.length(partiter::ParallelCollectionPartitionIterator{T})  where {T} = partiter.count
 
 """
     ParallelCollectionRDD{T}(col::AbstractVector{T}) where {T}
@@ -84,18 +89,29 @@ end
 """ 
     iterator(
         rdd::ParallelCollectionRDD{T}, 
-        numpart::Int
+        numpart::Int,
+        parentiters::AbstractVector{AbstractPartitionIterator} = AbstractPartitionIterator[]
     )::ParallelCollectionPartitionIterator{T} where {T}
 
 Implementation of [`iterator`](@ref) for [`ParallelCollectionRDD`](@ref).
 """
 function iterator(
-        rdd::ParallelCollectionRDD{T}, numpart::Int
+        rdd::ParallelCollectionRDD{T}, 
+        numpart::Int, 
+        parentiters::AbstractVector{AbstractPartitionIterator} = AbstractPartitionIterator[]
     )::ParallelCollectionPartitionIterator{T} where {T}
 
         idxstart, idxend = rdd.parts[numpart].idxrange
+        rr = RemoteChannel(() -> Channel(2), 1)
+        @spawnat 1 begin
+            values = eval(rdd.colsymbol)
+            for index in idxstart:1:idxend
+                put!(rr, values[index])
+            end
+            put!(rr, nothing)
+        end
 
-        ParallelCollectionPartitionIterator{T}(@fetchfrom 1 eval(rdd.colsymbol)[idxstart:1:idxend])
+        ParallelCollectionPartitionIterator{T}(rr, length(idxstart:1:idxend))
 end
 
 end
