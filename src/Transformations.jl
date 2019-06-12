@@ -39,6 +39,9 @@ end
 
 ########################## filter ############################
 """
+    FilterPartitionIterator{T} <: AbstractPartitionIterator{T}
+
+Iterator that filters parent partition iterator elements with predicate `f`.
 """
 struct FilterPartitionIterator{T} <: AbstractPartitionIterator{T}
     f # filter function T -> Boolean
