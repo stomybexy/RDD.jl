@@ -13,7 +13,6 @@ using .AbstractRDDModule,
 export AbstractRDD,
     AbstractDependency,
     AbstractPartitioner,
-    AbstractPartitionIterator,
     partitions,
     preferredlocations,
     dependencies,
@@ -21,6 +20,7 @@ export AbstractRDD,
     partitioner,
     ParallelCollectionRDD,
     ParallelCollectionPartitionIterator,
-    MapPartitionsRDD
+    MapPartitionsRDD,
+    flatmap
 
 end # module

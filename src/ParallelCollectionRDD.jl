@@ -33,7 +33,7 @@ end
 
 Type of the iterator of a [`ParallelCollectionPartition`](@ref)
 """
-struct ParallelCollectionPartitionIterator{T} <: AbstractPartitionIterator{T}
+struct ParallelCollectionPartitionIterator{T}
     values::RemoteChannel
     count
 end
@@ -98,8 +98,8 @@ Implementation of [`iterator`](@ref) for [`ParallelCollectionRDD`](@ref).
 function iterator(
         rdd::ParallelCollectionRDD{T}, 
         numpart::Int, 
-        parentiters::AbstractVector{AbstractPartitionIterator} = AbstractPartitionIterator[]
-    )::ParallelCollectionPartitionIterator{T} where {T}
+        parentiters::AbstractVector = []
+    ) where {T}
 
         idxstart, idxend = rdd.parts[numpart].idxrange
         rr = RemoteChannel(() -> Channel(2), 1)
