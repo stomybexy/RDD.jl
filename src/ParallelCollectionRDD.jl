@@ -25,7 +25,8 @@ A subclass of AbstractRDD representing distributed in-memory collection.
 """
 struct ParallelCollectionRDD{T} <: AbstractRDD{T}
     parts::AbstractVector{ParallelCollectionPartition{T}}
-    colsymbol::Symbol
+    # colsymbol::Symbol
+    data::AbstractVector{T}
 end
 
 """
@@ -39,7 +40,11 @@ struct ParallelCollectionPartitionIterator{T}
 end
 
 Base.iterate(iter::ParallelCollectionPartitionIterator{T}, state = nothing) where {T} = begin
-    isopen(iter.values) ? (take!(iter.values), nothing) : nothing
+    if !isopen(iter.values) && !isready(iter.values)
+        nothing
+    else
+        take!(iter.values), nothing
+    end
 end
 
 Base.length(partiter::ParallelCollectionPartitionIterator{T})  where {T} = partiter.count
@@ -61,14 +66,14 @@ end
 Create a [`ParallelCollectionRDD`](@ref) from a vector with `numpart` partitions.
 """
 function ParallelCollectionRDD{T}(col::AbstractVector{T}, numpart::Int) where {T}
-    colsymbol = Symbol(randstring(10))
-    @eval $colsymbol = $col
+    # colsymbol = Symbol(randstring(10))
+    # @eval $colsymbol = $col
 
     partsize = ceil(length(col) / numpart) |> Int
     parts = map(1:1:numpart) do p
         ((p - 1) * partsize + 1, min(p * partsize, length(col))) |> ParallelCollectionPartition{T}
     end
-    ParallelCollectionRDD{T}(parts, colsymbol)
+    ParallelCollectionRDD{T}(parts, col)
 end
 
 """
@@ -97,16 +102,23 @@ function iterator(rdd::ParallelCollectionRDD{T},
         parentiters::AbstractVector = []) where {T}
 
     idxstart, idxend = rdd.parts[numpart].idxrange
-    rr = RemoteChannel(()->Channel(2), 1)
-    @spawnat 1 begin
-        values = eval(rdd.colsymbol)
-        for index in idxstart:1:idxend
-            put!(rr, values[index])
+    
+    Channel() do ch
+        for i in idxstart:1:idxend
+            put!(ch, rdd.data[i])
         end
-        close(rr)
+        close(ch)
     end
+    # rr = RemoteChannel(()->Channel(2), 1)
+    # @spawnat 1 begin
+    #     values = eval(rdd.colsymbol)
+    #     for index in idxstart:1:idxend
+    #         put!(rr, values[index])
+    #     end
+    #     close(rr)
+    # end
 
-    ParallelCollectionPartitionIterator{T}(rr, length(idxstart:1:idxend))
+    # ParallelCollectionPartitionIterator{T}(rr, length(idxstart:1:idxend))
 end
 
 end

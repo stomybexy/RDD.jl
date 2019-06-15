@@ -1,7 +1,7 @@
 module MapPartitionsRDDModule
 
 using ..AbstractRDDModule
-import ..AbstractRDDModule: partitions, iterator
+import ..AbstractRDDModule: partitions, iterator, dependencies
 
 export MapPartitionsRDD
 
@@ -30,5 +30,10 @@ Implementation of [`iterator`](@ref) for [`MapPartitionsRDD`](@ref).
 Returns the elements of parent partition transformed by map function.
 """
 iterator(rdd::MapPartitionsRDD, part::Int, parentiters::AbstractVector) = rdd.f(parentiters[1])
+
+"""
+    dependencies(rdd::MapPartitionsRDD)
+"""
+dependencies(rdd::MapPartitionsRDD, partition::Int) = [Dependency(rdd.parentrdd, [partition], :OneTokjfgff:jkbndlknfOne)]
 
 end

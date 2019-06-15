@@ -4,14 +4,16 @@ include("./AbstractRDD.jl")
 include("./ParallelCollectionRDD.jl")
 include("./MapPartitionsRDD.jl")
 include("./Transformations.jl")
+include("./Actions.jl")
 
 using .AbstractRDDModule, 
       .ParallelCollectionRDDModule,
       .MapPartitionsRDDModule,
-      .Transformations
+      .Transformations,
+      .Actions
 
 export AbstractRDD,
-    AbstractDependency,
+    Dependency,
     AbstractPartitioner,
     partitions,
     preferredlocations,
@@ -21,6 +23,7 @@ export AbstractRDD,
     ParallelCollectionRDD,
     ParallelCollectionPartitionIterator,
     MapPartitionsRDD,
-    flatmap
+    flatmap,
+    compute
 
 end # module
