@@ -17,7 +17,7 @@ using Test
         @testset "applies map function to each element of parent rdd" begin
             rdd = map(x -> x * x, parentrdd, Int)
             parentiter = iterator(parentrdd, 1)
-            @test collect(iterator(rdd, 1, AbstractPartitionIterator[parentiter])) == [1, 4, 9, 16, 25]
+            @test collect(iterator(rdd, 1, [parentiter])) == [1, 4, 9, 16, 25]
         end
 
     end
@@ -32,7 +32,18 @@ using Test
         @testset "should correctly filter parent rdd elements" begin
             rdd = filter(x -> x % 2 == 0, parentrdd)
             parentiter = iterator(parentrdd, 1)
-            @test collect(iterator(rdd, 1, AbstractPartitionIterator[parentiter])) == [2,4]
+            @test collect(iterator(rdd, 1, [parentiter])) == [2,4]
+        end
+    end
+
+    @testset "flatmap transformation" begin
+        v = collect(1:1:5)
+        parentrdd = ParallelCollectionRDD{Int}(v, 2)
+
+        @testset "should correctly flatten parent rdd elements mapped by f" begin
+            rdd = flatmap(x -> (x, 2x), parentrdd, Int)
+            parentiter = iterator(parentrdd, 1)
+            @test collect(iterator(rdd, 1, [parentiter])) == [1,2,2,4,3,6]
         end
     end
 

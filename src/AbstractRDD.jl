@@ -6,7 +6,6 @@ using DocStringExtensions
 export AbstractRDD,
     AbstractDependency,
     AbstractPartitioner,
-    AbstractPartitionIterator,
     partitions,
     preferredlocations,
     dependencies,
@@ -17,11 +16,6 @@ export AbstractRDD,
 Parent type of rdds.
 """
 abstract type AbstractRDD{T} end
-
-"""
-Parent type of rdd partitions iterators.
-"""
-abstract type AbstractPartitionIterator{T} end
 
 """
 Parent type of rdd partitions preferred locations.
@@ -85,7 +79,7 @@ This method must be implemented by subclasses of [`AbstractRDD`](@ref).
 """
 function iterator(
         rdd::AbstractRDD{T},
-        partition::Int, parentiters::AbstractVector{AbstractPartitionIterator})::AbstractPartitionIterator{T} where {T}
+        partition::Int, parentiters::AbstractVector) where {T}
 
     error("method iterator(::$(typeof(rdd)),::$(typeof(partition))) has not bean implemented")
 

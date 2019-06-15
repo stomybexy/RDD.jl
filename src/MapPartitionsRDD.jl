@@ -24,23 +24,11 @@ Returns the same partitions count as parent rdd.
 partitions(rdd::MapPartitionsRDD)::Int64 = partitions(rdd.parentrdd)
 
 """
-    iterator(
-        rdd::MapPartitionsRDD, 
-        part::Int, 
-        parentiters::AbstractVector{AbstractPartitionIterator}
-    )::AbstractPartitionIterator{T} where {T}
+    iterator(rdd::MapPartitionsRDD, part::Int, parentiters::AbstractVector)
 
 Implementation of [`iterator`](@ref) for [`MapPartitionsRDD`](@ref).
 Returns the elements of parent partition transformed by map function.
 """
-function iterator(
-    rdd::MapPartitionsRDD{T}, 
-    part::Int,
-    parentiters::AbstractVector{AbstractPartitionIterator}
-)::AbstractPartitionIterator{T} where {T}
-
-    rdd.f(parentiters[1])
-
-end
+iterator(rdd::MapPartitionsRDD, part::Int, parentiters::AbstractVector) = rdd.f(parentiters[1])
 
 end
