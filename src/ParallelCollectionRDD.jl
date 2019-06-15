@@ -15,7 +15,7 @@ export ParallelCollectionRDD,
 Type of a partition of [`ParallelCollectionRDD`](@ref)
 """
 struct ParallelCollectionPartition{T}
-    idxrange::NTuple{2, Int}
+    idxrange::NTuple{2,Int}
 end
 
 """
@@ -38,12 +38,8 @@ struct ParallelCollectionPartitionIterator{T}
     count
 end
 
-Base.iterate(iter::ParallelCollectionPartitionIterator{T}, state=nothing) where {T} = begin
-    val = take!(iter.values)
-    if !isnothing(val) 
-        return val, nothing
-    end
-    return nothing
+Base.iterate(iter::ParallelCollectionPartitionIterator{T}, state = nothing) where {T} = begin
+    isopen(iter.values) ? (take!(iter.values), nothing) : nothing
 end
 
 Base.length(partiter::ParallelCollectionPartitionIterator{T})  where {T} = partiter.count
@@ -82,11 +78,12 @@ end
 
 Implementation of [`partitions`](@ref) for [`ParallelCollectionRDD`](@ref).
 """
-function partitions(rdd:: ParallelCollectionRDD{T})::Int64 where {T} 
+function partitions(rdd::ParallelCollectionRDD{T})::Int64 where {T} 
     rdd.parts |> length
 end
 
-""" 
+"""
+ 
     iterator(
         rdd::ParallelCollectionRDD{T}, 
         numpart::Int,
@@ -95,23 +92,21 @@ end
 
 Implementation of [`iterator`](@ref) for [`ParallelCollectionRDD`](@ref).
 """
-function iterator(
-        rdd::ParallelCollectionRDD{T}, 
+function iterator(rdd::ParallelCollectionRDD{T}, 
         numpart::Int, 
-        parentiters::AbstractVector = []
-    ) where {T}
+        parentiters::AbstractVector = []) where {T}
 
-        idxstart, idxend = rdd.parts[numpart].idxrange
-        rr = RemoteChannel(() -> Channel(2), 1)
-        @spawnat 1 begin
-            values = eval(rdd.colsymbol)
-            for index in idxstart:1:idxend
-                put!(rr, values[index])
-            end
-            put!(rr, nothing)
+    idxstart, idxend = rdd.parts[numpart].idxrange
+    rr = RemoteChannel(()->Channel(2), 1)
+    @spawnat 1 begin
+        values = eval(rdd.colsymbol)
+        for index in idxstart:1:idxend
+            put!(rr, values[index])
         end
+        close(rr)
+    end
 
-        ParallelCollectionPartitionIterator{T}(rr, length(idxstart:1:idxend))
+    ParallelCollectionPartitionIterator{T}(rr, length(idxstart:1:idxend))
 end
 
 end
