@@ -34,6 +34,6 @@ iterator(rdd::MapPartitionsRDD, part::Int, parentiters::AbstractVector) = rdd.f(
 """
     dependencies(rdd::MapPartitionsRDD)
 """
-dependencies(rdd::MapPartitionsRDD, partition::Int) = [Dependency(rdd.parentrdd, [partition], :OneTokjfgff:jkbndlknfOne)]
+dependencies(rdd::MapPartitionsRDD, partition::Int) = [Dependency(rdd.parentrdd, [partition], :OneToOne)]
 
 end

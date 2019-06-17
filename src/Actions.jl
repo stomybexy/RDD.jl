@@ -4,7 +4,7 @@ using Distributed, ..AbstractRDDModule
 
 import Base: reduce
 
-function reduce(f, rdd::AbstractRDD{T}, init) where T
+function reduce(f, rdd::AbstractRDD{T}, init::T) where T
     @distributed f for partition in 1:1:partitions(rdd)
         reduce(f, (x for x in compute(rdd, partition)), init)
     end

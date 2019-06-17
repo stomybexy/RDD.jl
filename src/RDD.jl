@@ -21,7 +21,6 @@ export AbstractRDD,
     iterator,
     partitioner,
     ParallelCollectionRDD,
-    ParallelCollectionPartitionIterator,
     MapPartitionsRDD,
     flatmap,
     compute

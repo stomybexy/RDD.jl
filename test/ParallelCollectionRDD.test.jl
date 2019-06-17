@@ -12,7 +12,7 @@ using Test
     v = Int[1,2,3,4,5,6]
 
     @testset "define partitions interface" begin
-        rdd = ParallelCollectionRDD{Int}([], 1:1:10)
+        rdd = ParallelCollectionRDD{Int}([], :bidule)
         @test isa(partitions(rdd), Int64)
     end
 
