@@ -7,4 +7,5 @@ using RDD, Distributed
     include("./ParallelCollectionRDD.test.jl")
     include("./MapPartitionsRDD.test.jl")
     include("./Transformations.test.jl")
+    include("./Actions.test.jl")
 end

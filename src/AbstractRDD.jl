@@ -59,9 +59,7 @@ preferredlocations(rdd::AbstractRDD, partition::Int)::AbstractVector{Int} = Int[
 Returns the list of parent rdds partitions `partition` of `rdd` depends on 
 with the type of the dependency.
 """
-function dependencies(rdd::AbstractRDD, partition::Int)::AbstractVector{Dependency} 
-    []
-end
+dependencies(rdd::AbstractRDD, partition::Int)::AbstractVector{Dependency} = Dependency[]
 
 """ 
     iterator(rdd::AbstractRDD, partition::Int, parentiters::AbstractVector)

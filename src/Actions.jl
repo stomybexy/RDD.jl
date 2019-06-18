@@ -4,6 +4,12 @@ using Distributed, ..AbstractRDDModule
 
 import Base: reduce
 
+"""
+    reduce(f, rdd::AbstractRDD{T}, init::T) where T
+
+Reduce the elements of `rdd` using the binary function `f` with the init value `init`.
+`f`must be commutative and associative and `init` must be neutral for `f`. 
+"""
 function reduce(f, rdd::AbstractRDD{T}, init::T) where T
     @distributed f for partition in 1:1:partitions(rdd)
         reduce(f, (x for x in compute(rdd, partition)), init)
