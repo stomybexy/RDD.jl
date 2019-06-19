@@ -13,7 +13,7 @@ using Test
 
     @testset "define partitions interface" begin
         rdd = ParallelCollectionRDD{Int}([], :bidule)
-        @test isa(partitions(rdd), Int64)
+        @test isa(partitions(rdd), Int)
     end
 
     @testset "Constructor" begin
