@@ -12,8 +12,8 @@ using Test
     v = Int[1,2,3,4,5,6]
 
     @testset "define partitions interface" begin
-        rdd = ParallelCollectionRDD{Int}([], Symbol("blabla"))
-        @test isa(partitions(rdd), Int64)
+        rdd = ParallelCollectionRDD{Int}([], :bidule)
+        @test isa(partitions(rdd), Int)
     end
 
     @testset "Constructor" begin
@@ -40,10 +40,7 @@ using Test
     end
 
     @testset "iterator implementation" begin
-        @testset "should be defined" begin
-            rdd = ParallelCollectionRDD{Int}(v)
-            @test isa(iterator(rdd, 1), ParallelCollectionPartitionIterator{Int})
-        end
+       
         @testset "should return partition data with the default partitioner (range)" begin
             rdd = ParallelCollectionRDD{Int}(v, 2)
             iter = iterator(rdd, 1)
