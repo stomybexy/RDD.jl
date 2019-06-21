@@ -32,7 +32,7 @@ Returns the elements of parent partition transformed by map function.
 iterator(rdd::MapPartitionsRDD, part::Int, parentiters::AbstractVector) = rdd.f(parentiters[1])
 
 """
-    dependencies(rdd::MapPartitionsRDD)
+    dependencies(rdd::MapPartitionsRDD, partition::Int)
 """
 dependencies(rdd::MapPartitionsRDD, partition::Int) = [Dependency(rdd.parentrdd, [partition], :OneToOne)]
 

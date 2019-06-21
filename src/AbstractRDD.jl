@@ -3,8 +3,6 @@ module AbstractRDDModule
 
 using DocStringExtensions
 
-import Base: zero
-
 export AbstractRDD,
     Dependency,
     AbstractPartitioner,
@@ -92,7 +90,5 @@ function compute(rdd::AbstractRDD, partition::Int)
         Iterators.flatten([[compute(dep.rdd, part) for part in dep.partitions] for dep in deps]) |> collect
     )
 end
-
-zero(::AbstractRDD{T}) where T = zero(T)
 
 end
