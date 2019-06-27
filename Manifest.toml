@@ -3,6 +3,18 @@
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
+[[CSTParser]]
+deps = ["Tokenize"]
+git-tree-sha1 = "376a39f1862000442011390f1edf5e7f4dcc7142"
+uuid = "00ebfdb7-1f24-5e51-bd34-a7502290713f"
+version = "0.6.0"
+
+[[Compat]]
+deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
+git-tree-sha1 = "84aa74986c5b9b898b0d1acaf3258741ee64754f"
+uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
+version = "2.1.0"
+
 [[Dagger]]
 deps = ["Distributed", "LinearAlgebra", "MemPool", "Profile", "Random", "Serialization", "SharedArrays", "SparseArrays", "Statistics", "StatsBase", "Test"]
 git-tree-sha1 = "39dd9351c6637a71d1925e26e49adcd8a25ebf0b"
@@ -19,6 +31,10 @@ version = "0.15.0"
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
+[[DelimitedFiles]]
+deps = ["Mmap"]
+uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+
 [[Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
@@ -33,6 +49,12 @@ version = "0.7.0"
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
+[[Lazy]]
+deps = ["Compat", "MacroTools", "Test"]
+git-tree-sha1 = "aec38c7e7f255a678af22651c74100e3cd39ea20"
+uuid = "50d2b5c4-7a5e-59d5-8109-a42b560f39c0"
+version = "0.13.2"
+
 [[LibGit2]]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
@@ -45,6 +67,12 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[MacroTools]]
+deps = ["CSTParser", "Compat", "DataStructures", "Test"]
+git-tree-sha1 = "daecd9e452f38297c686eba90dba2a6d5da52162"
+uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+version = "0.5.0"
 
 [[Markdown]]
 deps = ["Base64"]
@@ -127,6 +155,11 @@ version = "0.30.0"
 [[Test]]
 deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[Tokenize]]
+git-tree-sha1 = "0de343efc07da00cd449d5b04e959ebaeeb3305d"
+uuid = "0796e94c-ce3b-5d07-9a54-7f471281c624"
+version = "0.5.4"
 
 [[UUIDs]]
 deps = ["Random", "SHA"]

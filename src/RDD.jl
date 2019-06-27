@@ -6,6 +6,8 @@ include("./MapPartitionsRDD.jl")
 include("./Transformations.jl")
 include("./Actions.jl")
 
+using Lazy
+
 using .AbstractRDDModule, 
       .ParallelCollectionRDDModule,
       .MapPartitionsRDDModule,
@@ -23,6 +25,7 @@ export AbstractRDD,
     ParallelCollectionRDD,
     MapPartitionsRDD,
     flatmap,
-    compute
+    compute,
+    @as
 
 end # module
