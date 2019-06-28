@@ -7,4 +7,8 @@ struct Node
     parent::Union{Nothing, Node}
 end
 
+function build_dag(rdd::AbstractRDD)::Node
+    
+end
+
 end

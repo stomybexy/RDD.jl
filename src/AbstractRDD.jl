@@ -18,6 +18,17 @@ Parent type of rdds.
 """
 abstract type AbstractRDD{T} end
 
+abstract type AbstractDependency end
+abstract type NarrowDependency <: AbstractDependency end
+abstract type WideDependency <: AbstractDependency end
+
+struct OneToOneDependency <: NarrowDependency
+    rdd::AbstractRDD
+end
+struct ShuffleDependency <: WideDependency
+    rdd::AbstractRDD
+end
+
 """
 Type of rdd dependency. 
 """
@@ -31,6 +42,12 @@ end
 Parent type of rdd partitioner.
 """
 abstract type AbstractPartitioner end
+
+deprdd(dep::AbstractDependency)::AbstractRDD = dep.rdd 
+
+function deppartitions(dep::AbstractDependency, part::Int)::Vector{Int} end
+deppartitions(dep::OneToOneDependency, part::Int) = [part]
+deppartitions(dep::ShuffleDependency, part::Int) = 1:(deprdd(dep) |> partitions) |> collect
 
 """ 
     partitions(rdd::AbstractRDD)::Int64
