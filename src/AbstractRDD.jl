@@ -6,6 +6,11 @@ using DocStringExtensions
 export AbstractRDD,
     Dependency,
     AbstractPartitioner,
+    AbstractDependency,
+    NarrowDependency,
+    WideDependency,
+    OneToOneDependency,
+    ShuffleDependency,
     partitions,
     preferredlocations,
     dependencies,
@@ -50,6 +55,13 @@ deppartitions(dep::OneToOneDependency, part::Int) = [part]
 deppartitions(dep::ShuffleDependency, part::Int) = 1:(deprdd(dep) |> partitions) |> collect
 
 """ 
+    dependencies(rdd::AbstractRDD)::Vector{AbstractDependency}
+
+Returns the list of dependencies of `rdd`
+"""
+dependencies(rdd::AbstractRDD)::Vector{AbstractDependency} = AbstractDependency[]
+
+""" 
     partitions(rdd::AbstractRDD)::Int64
 
 Returns the number of partitions of the given rdd.
@@ -68,13 +80,6 @@ The list is ordered by preference.
 """
 preferredlocations(rdd::AbstractRDD, partition::Int)::AbstractVector{Int} = Int[]
 
-""" 
-    dependencies(rdd::AbstractRDD, partition::Int)::AbstractVector{Dependency}
-
-Returns the list of parent rdds partitions `partition` of `rdd` depends on 
-with the type of the dependency.
-"""
-dependencies(rdd::AbstractRDD, partition::Int)::AbstractVector{Dependency} = Dependency[]
 
 """ 
     iterator(rdd::AbstractRDD, partition::Int, parentiters::AbstractVector)
@@ -100,11 +105,11 @@ partitioner(rdd::AbstractRDD)::Union{AbstractPartitioner, Nothing} = nothing
 Compute this rdd partition and return an iterator.
 """
 function compute(rdd::AbstractRDD, partition::Int)
-    deps = dependencies(rdd, partition)
+    deps = dependencies(rdd)
     iterator(
         rdd, 
         partition, 
-        Iterators.flatten([[compute(dep.rdd, part) for part in dep.partitions] for dep in deps]) |> collect
+        Iterators.flatten([[compute(deprdd(dep), part) for part in deppartitions(dep, part)] for dep in deps]) |> collect
     )
 end
 

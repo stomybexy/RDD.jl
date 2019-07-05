@@ -12,7 +12,7 @@ using Test
         @test isempty(preferredlocations(rdd, 1))
     end
     @testset "No dependencies by default" begin
-        @test isempty(dependencies(rdd, 1))
+        @test isempty(dependencies(rdd))
     end
     @testset "iterator function is defined" begin
         @test_throws ErrorException iterator(rdd, 1, [])

@@ -13,9 +13,10 @@ using Test
     @testset "defines a oneToOne dependency to parent rdd" begin
         parentrdd = ParallelCollectionRDD{Int}(v)
         rdd = MapPartitionsRDD{Int}(iter -> iter, parentrdd)
-        dep = dependencies(rdd, 1)[1]
+        dep = dependencies(rdd)[1]
+        @test dep isa OneToOneDependency
         @test dep.rdd == parentrdd
-        @test dep.type == :OneToOne
+        
     end
 
 end
